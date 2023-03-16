@@ -14,9 +14,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var timePickerContainer:UIView!
     @IBOutlet weak var pickerContainer:UIView!
     
-    //var delegate:OrderTimeViewControllerDelegate!
-    
-
     var selectedDate = ""
     var selectYear = ""
     var selectMonth = ""
@@ -26,7 +23,7 @@ class ViewController: UIViewController {
     var timeformat = ""
     
     var selectDay = ""
-
+    
     var daysArray = [String]()
     
     var editUpdate = false
@@ -39,12 +36,12 @@ class ViewController: UIViewController {
     
     var pickerComponent:PickerComponentView!
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupDatePickerView()
         self.timePickerSetup()
-
+        
         // Do any additional setup after loading the view.
     }
     
@@ -89,7 +86,7 @@ class ViewController: UIViewController {
         let daysScroll = self.getModifiedDateFromDateString(selectDay, setFormat: "dd", getFormat: "d")
         datePicker.dataSource = self
         datePicker.delegate = self
-       // datePicker.enableMode = .default
+        // datePicker.enableMode = .default
         datePicker.selectRow((Int(month)!-1), inComponent: 1, animated: true)
         datePicker.selectRow((Int(daysScroll)!-1), inComponent: 2, animated: true)
         
@@ -110,18 +107,17 @@ class ViewController: UIViewController {
         timePickerView.selectRow(Int(timeSlot[1])!, inComponent: 1, animated: true)
         let selectIndex = getCurrentTime[1] == "AM" ? 0 : 1
         timePickerView.selectRow(selectIndex, inComponent: 2, animated: true)
-
+        
     }
-
-
+    
 }
 
 extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 3
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch component {
         case 0:
@@ -129,13 +125,13 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         case 1:
             return pickerView == timePickerView ? minArray.count : months.count
         case 2:
-             self.daysArray = self.updateDays()
+            self.daysArray = self.updateDays()
             return pickerView == timePickerView ? timeFormat.count : daysArray.count
         default:
             return 0
         }
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return pickerView.frame.size.width/3
     }
@@ -144,8 +140,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return pickerView.frame.size.height/3
     }
     
-
-
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if pickerView == timePickerView{
             switch component{
@@ -162,20 +156,19 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 return ""
             }
         }else{
-        switch component {
-        case 0:
-            return yearsMore_20[row]
-        case 1:
-            return months[row]
-        case 2:
-            return daysArray[row]
-            
-        default:
-            return ""
+            switch component {
+            case 0:
+                return yearsMore_20[row]
+            case 1:
+                return months[row]
+            case 2:
+                return daysArray[row]
+                
+            default:
+                return ""
+            }
         }
     }
-    }
-
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == timePickerView{
@@ -193,39 +186,39 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 break;
             }
         }else{
-        switch component {
-        case 0:
-            self.yearSetup(row: row)
-            selectYear = yearsMore_20[row]
-            updateTimeAccordingToDate()
-
-        case 1:
-            self.selectMonth = months[row]
-            self.monthSetup(row: row)
-            updateTimeAccordingToDate()
-
-        case 2:
-            self.selectDay = daysArray[row]
-            self.daySetup(row: row)
-            updateTimeAccordingToDate()
-        default:
-            break;
+            switch component {
+            case 0:
+                self.yearSetup(row: row)
+                selectYear = yearsMore_20[row]
+                updateTimeAccordingToDate()
+                
+            case 1:
+                self.selectMonth = months[row]
+                self.monthSetup(row: row)
+                updateTimeAccordingToDate()
+                
+            case 2:
+                self.selectDay = daysArray[row]
+                self.daySetup(row: row)
+                updateTimeAccordingToDate()
+            default:
+                break;
+            }
         }
-      }
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         var pickerLabel: UILabel? = (view as? UILabel)
         if pickerLabel == nil {
             pickerLabel = UILabel()
-          //  pickerLabel?.font = fonts.Poppins.semibold.font(.large)//UIFont(name: "Your Font Name", size: 25)
+            //  pickerLabel?.font = fonts.Poppins.semibold.font(.large)//UIFont(name: "Your Font Name", size: 25)
             pickerLabel?.textAlignment = .center
         }
         if pickerView == timePickerView{
             pickerLabel?.text =  component == 0  ? hoursArray[row] : component == 1 ? minArray[row] : timeFormat[row]
         }else{
             self.daysArray = self.updateDays()
-          pickerLabel?.text =  component == 0  ? yearsMore_20[row] : component == 1 ? months[row] : daysArray[row]
+            pickerLabel?.text =  component == 0  ? yearsMore_20[row] : component == 1 ? months[row] : daysArray[row]
         }
         for views in pickerView.subviews{
             views.backgroundColor = .clear
@@ -235,7 +228,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         return pickerLabel!
     }
-    
     
     func yearSetup(row:Int){
         let year = yearsMore_20[row]
@@ -259,7 +251,6 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         self.selectDay = self.getModifiedDateFromDateString("\(getCurrentDay)", setFormat: "d", getFormat: "dd")
         self.datePicker.selectRow(getCurrentDay-1, inComponent: 2, animated: true)
         self.datePicker.reloadComponent(2)
-
     }
     
     func monthSetup(row:Int){
@@ -267,7 +258,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let date = Date()
         let currentMonth = calendar.component(.month, from: date)
         let currentYear = calendar.component(.year, from: date)
-      //  print_debug("Month =========>>>>>>>> \(currentMonth)   Year =========>>>>>>>> \(currentYear)")
+        //  print_debug("Month =========>>>>>>>> \(currentMonth)   Year =========>>>>>>>> \(currentYear)")
         let month = months[row]
         let newMonth = self.getModifiedDateFromDateString(month, setFormat: "MMM", getFormat: "M")
         self.selectMonth = month
@@ -282,12 +273,12 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             self.selectDay = self.getModifiedDateFromDateString("\(getCurrentDay)", setFormat: "d", getFormat: "dd")
             self.datePicker.reloadComponent(2)
             self.datePicker.selectRow(getCurrentDay-1, inComponent: 2, animated: true)
-           // NKToastHelper.shared.showAlert(self, title: warningMessage.title, message: "Sorry, You can't select smaller date")
+            // NKToastHelper.shared.showAlert(self, title: warningMessage.title, message: "Sorry, You can't select smaller date")
             return
         }
         self.datePicker.reloadComponent(2)
         self.datePicker.selectRow(getCurrentDay-1, inComponent: 2, animated: true)
-
+        
     }
     
     func daySetup(row:Int){
@@ -297,9 +288,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let currentDay = calendar.component(.day, from: date)
         let currentMonth = calendar.component(.month, from: date)
         let currentYear = calendar.component(.year, from: date)
-        
-       // print_debug("Days =====>>>>>>> \(currentDay)   Month =========>>>>>>>> \(currentMonth)   Year =========>>>>>>>> \(currentYear)")
-
+        // print_debug("Days =====>>>>>>> \(currentDay)   Month =========>>>>>>>> \(currentMonth)   Year =========>>>>>>>> \(currentYear)")
         self.daysArray = self.updateDays()
         let day = daysArray[row]
         self.selectDay = day
@@ -325,51 +314,47 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         var days = [String]()
         days.removeAll()
         for i in 1...totalDaysInMonth!{
-        days.append("\(self.getModifiedDateFromDateString("\(i)", setFormat: "d", getFormat: "dd"))")
+            days.append("\(self.getModifiedDateFromDateString("\(i)", setFormat: "d", getFormat: "dd"))")
         }
         return days
     }
     
-    
     func getDaysInMonth(month: Int, year: Int) -> Int? {
-            let calendar = Calendar.current
-            var startComps = DateComponents()
-            startComps.day = 1
-            startComps.month = month
-            startComps.year = year
-            var endComps = DateComponents()
-            endComps.day = 1
-            endComps.month = month == 12 ? 1 : month + 1
-            endComps.year = month == 12 ? year + 1 : year
-            let startDate = calendar.date(from: startComps)!
-            let endDate = calendar.date(from:endComps)!
-            let diff = calendar.dateComponents([Calendar.Component.day], from: startDate, to: endDate)
-            return diff.day
-        }
-    
+        let calendar = Calendar.current
+        var startComps = DateComponents()
+        startComps.day = 1
+        startComps.month = month
+        startComps.year = year
+        var endComps = DateComponents()
+        endComps.day = 1
+        endComps.month = month == 12 ? 1 : month + 1
+        endComps.year = month == 12 ? year + 1 : year
+        let startDate = calendar.date(from: startComps)!
+        let endDate = calendar.date(from:endComps)!
+        let diff = calendar.dateComponents([Calendar.Component.day], from: startDate, to: endDate)
+        return diff.day
+    }
     
     func getCurrentMonth(year: Int,month: Int) -> Int? {
-            let calendar = Calendar.current
-            let date = Date()
-            let currentMonth = (year == calendar.component(.year, from: date)) ? calendar.component(.month, from: date) : 1
-            return currentMonth
-        }
-    
+        let calendar = Calendar.current
+        let date = Date()
+        let currentMonth = (year == calendar.component(.year, from: date)) ? calendar.component(.month, from: date) : 1
+        return currentMonth
+    }
     
     func getCurrentDay(month: Int,year:Int) -> Int? {
-            let calendar = Calendar.current
-            let date = Date()
-            let currentDay = (month == calendar.component(.month, from: date)) && (year == calendar.component(.year, from: date))  ? calendar.component(.day, from: date) : 1
-            return currentDay
-        }
-    
+        let calendar = Calendar.current
+        let date = Date()
+        let currentDay = (month == calendar.component(.month, from: date)) && (year == calendar.component(.year, from: date))  ? calendar.component(.day, from: date) : 1
+        return currentDay
+    }
     
     func getCurrentDateAndMonthYear(month: Int,year:Int,day:Int) -> Int? {
-            let calendar = Calendar.current
-            let date = Date()
+        let calendar = Calendar.current
+        let date = Date()
         let currentDay = (month == calendar.component(.month, from: date)) && (year == calendar.component(.year, from: date)) && (day <= calendar.component(.day, from: date))  ? calendar.component(.day, from: date) : day
-            return currentDay
-        }
+        return currentDay
+    }
     
     func getCurrentTimeForCurrentDay(hour:String,minute:String,timeFormat:String){
         let currentTime = self.getCurrentTime(format: "HH:mm a")
@@ -381,55 +366,50 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         let slotTIme = Int(timeSlot[0])!>12 ? Int(timeSlot[0])!-12  : Int(timeSlot[0])
         
         // MARK: -Time picker  set Hours
-
+        
         if getCurrent == "\(self.selectDay) \(self.selectMonth) \(self.selectYear)"{
             if Int(timeSlot[0])! <= newHour{
-               timePickerView.selectRow(Int(hour)!-1, inComponent: 0, animated: true)
+                timePickerView.selectRow(Int(hour)!-1, inComponent: 0, animated: true)
                 self.hour = self.hoursArray[Int(hour)!-1]
                 timePickerView.reloadComponent(0)
-
-           }else if Int(timeSlot[0])! >= newHour && getCurrentTime[1] == timeFormat{
+                
+            }else if Int(timeSlot[0])! >= newHour && getCurrentTime[1] == timeFormat{
                 timePickerView.selectRow(slotTIme!-1, inComponent: 0, animated: true)
-               self.hour = self.hoursArray[slotTIme!-1]
-
-               timePickerView.reloadComponent(0)
-
+                self.hour = self.hoursArray[slotTIme!-1]
+                timePickerView.reloadComponent(0)
             }else if Int(timeSlot[0])! >= newHour && getCurrentTime[1] != timeFormat{
                 timePickerView.selectRow(slotTIme!-1, inComponent: 0, animated: true)
                 self.hour = self.hoursArray[slotTIme!-1]
                 timePickerView.reloadComponent(0)
-
             }
-            
             // MARK: -Time picker  set minute
-
+            
             if Int(timeSlot[1])! >= Int(minute)! && Int(timeSlot[0])! >= newHour && getCurrentTime[1] == timeFormat{
                 timePickerView.selectRow(Int(timeSlot[1])!, inComponent: 1, animated: true)
                 self.minutes = self.minArray[Int(timeSlot[1])!]
                 timePickerView.reloadComponent(1)
-
+                
             }else if Int(timeSlot[1])! >= Int(minute)! && Int(timeSlot[0])! < newHour && getCurrentTime[1] == timeFormat{
                 timePickerView.selectRow(Int(minute)!, inComponent: 1, animated: true)
                 self.minutes = self.minArray[Int(minute)!]
                 timePickerView.reloadComponent(1)
-
+                
             }else if Int(timeSlot[1])! >= Int(minute)! && Int(timeSlot[0])! < newHour && getCurrentTime[1] != timeFormat{
                 timePickerView.selectRow(Int(minute)!, inComponent: 1, animated: true)
                 self.minutes = self.minArray[Int(minute)!]
-
+                
                 timePickerView.reloadComponent(1)
-
+                
             }else if Int(timeSlot[1])! >= Int(minute)! && Int(timeSlot[0])! >= newHour && getCurrentTime[1] != timeFormat{
                 timePickerView.selectRow(Int(timeSlot[1])!, inComponent: 1, animated: true)
                 self.minutes = self.minArray[Int(timeSlot[1])!]
                 timePickerView.reloadComponent(1)
-
+                
             }else if Int(timeSlot[1])! <= Int(minute)!{
                 timePickerView.selectRow(Int(minute)!, inComponent: 1, animated: true)
                 self.minutes = self.minArray[Int(minute)!]
                 timePickerView.reloadComponent(1)
             }
-            
             
             // MARK: - time format set time picker
             if getCurrentTime[1] != timeFormat && Int(timeSlot[0])! >= newHour{
@@ -442,25 +422,24 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 timePickerView.selectRow(selectIndex, inComponent: 2, animated: true)
                 timeformat = self.timeFormat[selectIndex]
                 timePickerView.reloadComponent(2)
-
             }
-          }
+        }
     }
 }
 
 extension ViewController{
     
-     func getModifiedDateFromDateString(_ dateString: String,setFormat:String,getFormat:String) -> String
-      {
-          if dateString.isEmpty{return ""}
-          let df  = DateFormatter()
-          df.locale = Locale.autoupdatingCurrent
-          df.timeZone = TimeZone.autoupdatingCurrent
-          df.dateFormat = setFormat
-          let date = df.date(from: dateString)!
-          df.dateFormat = getFormat
-          return df.string(from: date);
-      }
+    func getModifiedDateFromDateString(_ dateString: String,setFormat:String,getFormat:String) -> String
+    {
+        if dateString.isEmpty{return ""}
+        let df  = DateFormatter()
+        df.locale = Locale.autoupdatingCurrent
+        df.timeZone = TimeZone.autoupdatingCurrent
+        df.dateFormat = setFormat
+        let date = df.date(from: dateString)!
+        df.dateFormat = getFormat
+        return df.string(from: date);
+    }
     var yearsMore_20 : [String] {
         
         func nowCurrentYear() -> Int{
@@ -486,9 +465,8 @@ extension ViewController{
             let current = formatter.string(from: maxDate!)
             let year = Int(current) ?? 0
             return year
-            
         }
-
+        
         var years = [String]()
         let currentYear = nowCurrentYear()
         let maxYear = setMaxYear()

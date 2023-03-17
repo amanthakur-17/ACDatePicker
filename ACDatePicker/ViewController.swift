@@ -86,7 +86,6 @@ class ViewController: UIViewController {
         let daysScroll = self.getModifiedDateFromDateString(selectDay, setFormat: "dd", getFormat: "d")
         datePicker.dataSource = self
         datePicker.delegate = self
-        // datePicker.enableMode = .default
         datePicker.selectRow((Int(month)!-1), inComponent: 1, animated: true)
         datePicker.selectRow((Int(daysScroll)!-1), inComponent: 2, animated: true)
         
@@ -99,7 +98,6 @@ class ViewController: UIViewController {
         let timeSlot = getCurrentTime[0].components(separatedBy: ":")
         timePickerView.dataSource = self
         timePickerView.delegate = self
-        //timePickerView.enableMode = .default
         hour = timeSlot[0]
         minutes = timeSlot[1]
         timeformat = getCurrentTime[1]
@@ -223,8 +221,8 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         for views in pickerView.subviews{
             views.backgroundColor = .clear
         }
-        pickerLabel?.textColor = UIColor.white//appColor.appWhite
-        pickerLabel?.backgroundColor = UIColor.black.withAlphaComponent(0.6)//appColor.appBgColor
+        pickerLabel?.textColor = UIColor.white
+        pickerLabel?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         
         return pickerLabel!
     }
